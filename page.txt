@@ -1,0 +1,25 @@
+<div id="speedread"  style="display: none">
+
+<div class="wrap">
+  <button id='edit-btn-' class='my-btn' style='display: none'>Edit</button>
+  <input type=button class='my-btn' onclick="minusSpeed(this)" value="-25">
+  <input class="slider slider-orange" value="250" min="100" max="1000" step="25" id="speedSlider" type="range" />
+  <input type=button class='my-btn' onclick="plusSpeed(this)" value="+25">
+</div>
+
+<div id="word">
+	<textarea id="speed-reader-text-area" style="display: none; resize: none; width: 99.5%">
+"Enter Text Here"
+	</textarea>
+</div>
+
+<div class="wrap wrap2">
+  
+  <button class='play-btn my-btn' onclick="PlayPause()"><i class="fas fa-play"></i></button>
+  <input class='my-btn' type=button value="-1" onclick="minusWord(this)">
+  <input class="slider slider-orange" step="1" value="0" id="placeSlider" type="range" />
+  <input type=button class='my-btn' value="+1" onclick="plusWord(this)">
+</div>
+
+
+</div>

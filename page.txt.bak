@@ -1,0 +1,19 @@
+<div id="speedread"  style="display: none">
+
+<div class="wrap">
+  <input type=button onclick="minusSpeed(this)" value="-25">
+  <input class="slider slider-orange" value="250" min="100" max="1000" step="25" id="speedSlider" type="range" />
+  <input type=button onclick="plusSpeed(this)" value="+25">
+</div>
+
+<div id="word"></div>
+
+<div class="wrap">
+	<input type=button value="P" onlclick="PlayPause()">
+  <input type=button value="-1" onclick="minusWord(this)">
+  <input class="slider slider-orange" step="1" value="0" id="placeSlider" type="range" />
+  <input type=button value="+1" onclick="plusWord(this)">
+</div>
+
+
+</div>

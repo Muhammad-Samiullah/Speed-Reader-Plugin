@@ -1,0 +1,181 @@
+var $word, $speed_input, speed,index ;
+
+function go() {
+ index = 0;
+  $word = document.getElementById('word');
+  $speed_input = document.getElementById('speedSlider');
+  speed = $speed_input.value;
+  
+  $speed_input.onchange = function(ev) {
+    speed = ev.target.value;
+  };
+  	showWord.Play=true;
+  
+  var words = jQuery('.speed-reader').text().split(/\s/);
+  if(words.length > 0 && words[0]) {
+
+    showWord(words, 0);
+	jQuery("#placeSlider").attr("min",0);
+	jQuery("#placeSlider").attr("max",words.length-1);
+	
+  } else {
+    $word.innerHTML = '<i>No text</i>';
+  }
+}
+
+function showWord(words) {
+  if(words[index] !== undefined) {
+    $word.innerHTML = words[index];
+    setTimeout(function() {
+		if (showWord.Play == true){
+			showWord(words, index);
+			index ++;
+			document.getElementById("placeSlider").value=index;
+			UpdateTheSliders();
+		} else {
+			//showWord(words, index);
+		}
+    }, 60000/(speed));
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  go();
+});
+
+function UpdateTheSliders(){
+	$(".slider").each(function(i, elem){
+		updateSlider(this);
+		});
+}
+
+function minusSpeed(){
+	document.getElementById("speedSlider").value = parseInt(document.getElementById("speedSlider").value) - 25;
+	UpdateTheSliders();
+}
+function plusSpeed(){
+	console.log(document.getElementById("speedSlider").value);
+	document.getElementById("speedSlider").value = parseInt(document.getElementById("speedSlider").value) +25;
+	
+	UpdateTheSliders();
+}
+
+function minusWord(){
+	document.getElementById("placeSlider").value = parseInt(document.getElementById("placeSlider").value) - 1;
+	UpdateTheSliders();
+	showWord.Play = false;
+}
+function plusWord(){
+	console.log(document.getElementById("placeSlider").value);
+	document.getElementById("placeSlider").value = parseInt(document.getElementById("placeSlider").value) +1;
+	
+	UpdateTheSliders();
+	showWord.Play = false;
+}
+
+function PlayPause(){
+	showWord.Play = !showWord.Play;
+	console.log(!showWord.Play);
+}
+
+
+$("#placeSlider").on("change",function() {
+	//var i = document.getElementById("placeSlider").value;
+	//showWord.Play = false;
+	//showWord(words, i);
+	
+});
+
+$("document").ready(function() {
+    $(".slider").rangeslider();
+});
+$.fn.rangeslider = function(options) {
+    this.each(function(i, elem){
+        var obj = $(elem); // input element
+        var defautValue = obj.attr("value");
+		
+        var slider_max  = (obj.attr("max"));
+        var slider_min  = (obj.attr("min"));
+        var slider_step = (obj.attr("step"));
+        var slider_stop = (slider_max - slider_min) / slider_step;
+        var step_percentage = 100 / slider_stop;
+
+        var color = "";
+        var classlist = obj.attr("class").split(/\s+/);
+        $.each(classlist, function(index, item) {
+            if(item.startsWith('slider-')) {
+                color = item;
+            }
+        });
+
+        if(color == "") {
+            color = "slider-blue";
+        }
+
+        if(slider_stop <= 30){
+            var i;
+            var dots = "";
+            for (i = 1; i < slider_stop; i++){
+                dots += "<div class='dot' id='"+ i +"' style='left:"+ step_percentage * i +"%;'></div>";
+            }
+        }
+        else{
+            var dots = "";
+        }
+
+        obj.wrap("<span class='slider " + color + "'></span>");
+        obj.after("<span class='slider-container " + color + "'><span class='bar'><span></span>" + dots + "</span><span class='bar-btn'><span>0</span></span></span>");
+        obj.attr("oninput", "updateSlider(this)");
+        updateSlider(this);
+        return obj;
+    });
+};
+
+
+function updateSlider(passObj) {
+    var obj = $(passObj);
+    var value = obj.val();
+    var min = obj.attr("min");
+    var max = obj.attr("max");
+    var range = Math.round(max - min);
+    var percentage = Math.round((value - min) * 100 / range);
+    var nextObj = obj.next();
+	
+	$(passObj).trigger("change");
+	
+    var btn = nextObj.find("span.bar-btn");
+    
+    if(value == min){
+        nextObj.find("span.bar-btn").css("left", percentage + "%");
+    }
+    else if(value == max){
+        nextObj.find("span.bar-btn").css("left", "calc(" + percentage + "% - " + btn.width() + "px");
+    }
+    else{
+        nextObj.find("span.bar-btn").css("left", "calc(" + percentage + "% - " + btn.width()/2 + "px");
+    }
+    nextObj.find("span.bar > span").css("width", percentage + "%");
+    nextObj.find("span.bar-btn > span").text(value);
+};
+
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+	if(document.querySelector('.speed-reader')) {
+		$('#speedread').css('display', 'block');
+		words = document.querySelector('.speed-reader').innerText.split(/\s/);
+		words =  words.filter(e =>  e);
+		go();
+		$('.speed-reader').empty();
+		$('.speed-reader').append( $('#speedread') );
+		showWord.Play = false;
+	}
+	else {
+		console.log("Not Found");
+	}
+});
